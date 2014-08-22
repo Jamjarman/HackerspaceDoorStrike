@@ -9,7 +9,7 @@ session_start();
 //printVar($_SESSION);
 //printVar($_SESSION['permit'];
 $_SESSION['target']="accessRequests.php";
-if(!($_SESSION['permit'])){
+if(!($_SESSION['permit'] or $COOKIE["loggedin"])){
   //printVar("would exit");
   header("Location: login.html");
   die();
@@ -41,9 +41,9 @@ $(function () {
         mtype: "GET",
       colNames:['Card','Name', 'Email'], 
       colModel:[
-          {name:'card',index:'card', width:120},
-          {name:'name',index:'name', width:120}, 
-          {name:'email',index:'email', width:120}
+          {name:'card',index:'card', width:300},
+          {name:'name',index:'name', width:300}, 
+          {name:'email',index:'email', width:300}
       ], 
       rowNum:100, 
       height: 240,
@@ -64,8 +64,7 @@ $(function () {
     for(i=0; i<selected.length; i++){
       out[out.length]=jQuery('#list').jqGrid('getCell', selected[i], 'card');
     }
-    $.post("quickAdd.php", {id: out});
-    location.reload();
+    $.post("quickAdd.php", {id: out}, function(data){location.reload();});
     //window.location.href='quickAdd.php?id='+out[0];
     // $.post("addUser.php", {dataArray: out}, success: function(){
     //   window.location.href='adduser.php';
@@ -79,8 +78,7 @@ $(function () {
       out[out.length]=jQuery('#list').jqGrid('getCell', selected[i], 'card');
     }
     //window.location.href='quickRemove2.php?id='+out[0];
-    $.post("quickRemove.php", {id: out});
-    location.reload();
+    $.post("quickRemove.php", {id: out}, function(data){location.reload();});
     });
 
     $('#adminButton').click(function(){
@@ -89,8 +87,7 @@ $(function () {
     for(i=0; i<selected.length; i++){
       out[out.length]=jQuery('#list').jqGrid('getCell', selected[i], 'card');
     }
-    $.post("addAdmin.php", {id: out});
-    location.reload();
+    $.post("addAdmin.php", {id: out}, function(data){location.reload();});
     //window.location.href='addAdmin.php?id='+out[0];
     // $.post("addUser.php", {dataArray: out}, success: function(){
     //   window.location.href='adduser.php';
@@ -138,8 +135,9 @@ $(function () {
         <button class="btn btn-lg btn-primary btn-block" id="MyButton">Add Selected Users</button>
         <button class="btn btn-lg btn-primary btn-block" id="removeButton">Deny Selected Users</button>
 	<button class="btn btn-lg btn-primary btn-block" id="adminButton">Add User as Admin</button>
-        <table id="list" class="table"><tr><td></td></tr></table> 
-        
+      </div>
+      <div class="cold-md-1 cold-md-offset-6">
+	<table id="list" class="table"><tr><td></td></tr></table> 
       </div>
     </div>
   </div>

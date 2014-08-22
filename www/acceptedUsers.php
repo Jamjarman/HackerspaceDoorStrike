@@ -9,7 +9,7 @@ session_start();
 //printVar($_SESSION);
 //printVar($_SESSION['permit'];
 $_SESSION['target']="acceptedUsers.php";
-if(!($_SESSION['permit'])){
+if(!($_SESSION['permit'] or $COOKIE["loggedin"])){
   //printVar("would exit");
   header("Location: login.html");
   die();
@@ -41,10 +41,10 @@ $(function () {
         mtype: "GET",
       colNames:['Name','Card', 'Email', 'Admin'], 
       colModel:[ 
-          {name:'name',index:'name', width:120}, 
-          {name:'card',index:'card', width:120},
-          {name:'email',index:'email',width:120},
-          {name:'admin',index:'admin',width:120}
+          {name:'name',index:'name', width:300}, 
+          {name:'card',index:'card', width:300},
+          {name:'email',index:'email',width:300},
+          {name:'admin',index:'admin',width:100}
       ], 
       rowNum:100, 
       height: 240,
@@ -65,8 +65,7 @@ $(function () {
     for(i=0; i<selected.length; i++){
       out[out.length]=jQuery('#list').jqGrid ('getCell', selected[i], 'card');
     }
-    $.post("removeUser.php", {id: out});
-    location.reload();
+    $.post("removeUser.php", {id: out}, function(data){location.reload();});
     //window.location.href='removeUser.php?id='+out[0];
     // $.post("addUser.php", {dataArray: out}, success: function(){
     //   window.location.href='adduser.php';
@@ -79,8 +78,7 @@ $(function () {
       out[out.length]=jQuery('#list').jqGrid('getCell', selected[i], 'card');
     }
     //window.location.href='quickRemove2.php?id='+out[0];
-    $.post("makeAdmin.php", {id: out});
-    location.reload();
+    $.post("makeAdmin.php", {id: out}, function(data){location.reload();});
     });
 
     $('#removeAdmin').click(function(){
@@ -89,8 +87,7 @@ $(function () {
     for(i=0; i<selected.length; i++){
       out[out.length]=jQuery('#list').jqGrid('getCell', selected[i], 'card');
     }
-    $.post("removeAdmin.php", {id: out});
-    location.reload();
+    $.post("removeAdmin.php", {id: out}, function(data){location.reload();});
     //window.location.href='addAdmin.php?id='+out[0];
     // $.post("addUser.php", {dataArray: out}, success: function(){
     //   window.location.href='adduser.php';
@@ -138,7 +135,9 @@ $(function () {
         <button class="btn btn-lg btn-primary btn-block" id="MyButton">Remove Selected Users</button>
         <button class="btn btn-lg btn-primary btn-block" id="makeAdmin">Make User Admin</button>
         <button class="btn btn-lg btn-primary btn-block" id="removeAdmin">Remove Admin Status</button>
-        <table id="list" class="table"><tr><td></td></tr></table> 
+      </div>
+      <div class="cold-md-4 cold-md-offset-2">
+	<table id="list" class="table"><tr><td></td></tr></table> 
       </div>
     </div>
   </div>

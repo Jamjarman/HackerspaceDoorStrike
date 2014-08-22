@@ -24,7 +24,7 @@ function printVar($var){
 	echo '<br/>' . $var . '<br/>';
 	print_r($var);
 }
-header("Location: accessRequests.php");
+//header("Location: accessRequests.php");
 die();
 ?>
 
